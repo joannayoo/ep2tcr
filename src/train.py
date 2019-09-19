@@ -17,9 +17,10 @@ import math
 import logging
 import warnings
 warnings.filterwarnings('ignore')
-
-logging.basicConfig(level=logging.INFO)
-
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
+tf.logging.set_verbosity(tf.logging.ERROR)
+#logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.ERROR)
 
 logging.info("# hparams")
 hparams = Hparams()
@@ -79,17 +80,17 @@ with tf.Session() as sess:
             summary_writer.add_summary(_eval_summaries, _gs)
 
             logging.info("# get hypotheses")
-            hypotheses = get_hypotheses(num_eval_batches, num_eval_samples, sess, y_hat, m.idx2token)
+            #hypotheses = get_hypotheses(num_eval_batches, num_eval_samples, sess, y_hat, m.idx2token)
 
             logging.info("# write results")
             model_output = "iwslt2016_E%02dL%.2f" % (epoch, _loss)
             if not os.path.exists(hp.evaldir): os.makedirs(hp.evaldir)
-            translation = os.path.join(hp.evaldir, model_output)
-            with open(translation, 'w') as fout:
-                fout.write("\n".join(hypotheses))
+            #translation = os.path.join(hp.evaldir, model_output)
+            #with open(translation, 'w') as fout:
+            #    fout.write("\n".join(hypotheses))
 
             logging.info("# calc bleu score and append it to translation")
-            calc_bleu(hp.eval3, translation)
+            #calc_bleu(hp.eval3, translation)
 
             logging.info("# save models")
             ckpt_name = os.path.join(hp.logdir, model_output)
